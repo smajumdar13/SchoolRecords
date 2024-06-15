@@ -1,0 +1,2 @@
+# SchoolRecords
+Spring Boot Practice
