@@ -43,11 +43,11 @@ public class StudentController {
         return new ResponseEntity<>(studentService.findStudentById(id), HttpStatus.OK);
     }
 
-//    @PutMapping("{id}")
-//    public ResponseEntity<StudentDto> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) {
-//
-//        return new ResponseEntity<>(studentService.updateStudent(id, student), HttpStatus.ACCEPTED);
-//    }
+    @PutMapping("{id}")
+    public ResponseEntity<Student> updateStudent(@PathVariable("id") Long id, @RequestBody Student student) {
+
+        return new ResponseEntity<>(studentService.updateStudent(id, student), HttpStatus.ACCEPTED);
+    }
 
     @DeleteMapping("{id}")
     public ResponseEntity<String> deleteStudentById(@PathVariable("id") Long id) {

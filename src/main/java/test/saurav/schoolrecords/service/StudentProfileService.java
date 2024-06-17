@@ -8,7 +8,9 @@ import org.springframework.web.server.ResponseStatusException;
 import test.saurav.schoolrecords.domain.StudentProfile;
 import test.saurav.schoolrecords.repository.StudentProfileRepository;
 
+import java.net.http.HttpResponse;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @Service
@@ -20,8 +22,10 @@ public class StudentProfileService {
         this.studentProfileRepository = studentProfileRepository;
     }
 
-    public StudentProfile addStudentProfile(StudentProfile studentProfile) {
-        return studentProfileRepository.save(studentProfile);
+    public ResponseEntity<String> addStudentProfile(StudentProfile studentProfile) {
+            studentProfileRepository.save(studentProfile);
+            System.out.println("created");
+            return new ResponseEntity<>("StudentProfile successfully added.", HttpStatus.CREATED);
     }
 
     public List<StudentProfile> findAllStudentProfiles() {
@@ -36,9 +40,19 @@ public class StudentProfileService {
         return profile.get();
     }
 
-    public ResponseEntity<String> deleteStudentProfileById(Long id) {
-        studentProfileRepository.deleteById(id);
-        return new ResponseEntity<>("Student profile deleted successfully.", HttpStatus.ACCEPTED);
+    public void updateProfileByStudentId(Long studentId, StudentProfile studentProfile) {
+        StudentProfile profileToUpdate = studentProfileRepository.findStudentProfileByStudent_Id(studentId).orElseThrow(() -> new NoSuchElementException("Profile with student id " + studentId + " not found."));
+        profileToUpdate.setBio(studentProfile.getBio());
+        studentProfileRepository.save(profileToUpdate);
+    }
+
+    public String deleteStudentProfileById(Long id) {
+        try {
+            studentProfileRepository.deleteById(id);
+            return "Student profile deleted successfully.";
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
     }
 
 }

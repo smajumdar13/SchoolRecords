@@ -2,19 +2,11 @@ package test.saurav.schoolrecords.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 import org.springframework.dao.DuplicateKeyException;
-import test.saurav.schoolrecords.domain.School;
 import test.saurav.schoolrecords.domain.Student;
-import test.saurav.schoolrecords.domain.StudentProfile;
-import test.saurav.schoolrecords.factories.StudentFactory;
 import test.saurav.schoolrecords.repository.StudentRepository;
 
 import java.util.List;
@@ -25,8 +17,7 @@ import static java.util.Collections.*;
 import static org.apache.commons.lang3.RandomUtils.nextLong;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 import static test.saurav.schoolrecords.factories.StudentFactory.createStudent;
 
 //@ExtendWith(MockitoExtension.class)
@@ -53,7 +44,7 @@ class StudentServiceTest {
         studentService.addStudent(student);
 
         // Then
-        verify(studentRepository).save(student);
+        verify(studentRepository, times(1)).save(student);
     }
 
     @Test
@@ -130,7 +121,7 @@ class StudentServiceTest {
         studentService.deleteStudentById(id);
 
         // When/Then
-        verify(studentRepository).deleteById(id);
+        verify(studentRepository, times(1)).deleteById(id);
     }
 
     @Test

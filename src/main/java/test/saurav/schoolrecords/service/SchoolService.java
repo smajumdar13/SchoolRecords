@@ -6,6 +6,7 @@ import test.saurav.schoolrecords.domain.School;
 import test.saurav.schoolrecords.repository.SchoolRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class SchoolService {
@@ -25,7 +26,11 @@ public class SchoolService {
     }
 
     public School findSchoolById(Long id) {
-        return schoolRepository.findById(id).get();
+        return schoolRepository.findById(id).orElse(null);
+    }
+
+    public Optional<School> findSchoolByName(String name) {
+        return schoolRepository.findSchoolByName(name);
     }
 
 }

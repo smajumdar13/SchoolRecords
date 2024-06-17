@@ -2,18 +2,25 @@ package test.saurav.schoolrecords.domain;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table
 public class School {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "school_seq")
+    @SequenceGenerator(name = "school_seq", allocationSize = 1)
     private Long id;
 
+    @Column(unique = true)
+    @NotEmpty(message = "School name cannot be empty.")
     private String name;
 
     @OneToMany(mappedBy = "school", cascade = CascadeType.ALL)

@@ -13,19 +13,26 @@ import java.util.NoSuchElementException;
 @Service
 public class StudentService {
     private final StudentRepository studentRepository;
+    private final StudentProfileService studentProfileService;
 //    private final StudentMapper studentMapper;
 
     @Autowired
-    public StudentService(StudentRepository studentRepository) {
+    public StudentService(StudentRepository studentRepository,
+                          StudentProfileService studentProfileService) {
         this.studentRepository = studentRepository;
+        this.studentProfileService = studentProfileService;
     }
 
     public void addStudent(Student student) {
         try {
             studentRepository.save(student);
+            studentProfileService.addStudentProfile(student.getProfile());
         } catch (DuplicateKeyException ex) {
-            throw new DuplicateKeyException("The email already exists in a different record.");
+//            throw new DuplicateKeyException("The email already exists in a different record.");
             // add update flow instead
+            System.out.println("Student already exists. Trying to update...");
+            Student existingStudent = studentRepository.findByEmail(student.getEmail());
+            updateStudent(existingStudent.getId(), student);
         }
     }
 
@@ -34,15 +41,20 @@ public class StudentService {
     }
 
     public Student findStudentById(Long id) {
-        try {
-            return studentRepository.findById(id).get();
-        } catch (NoSuchElementException ex) {
-            throw new NoSuchElementException("The student with the id " + id + " doesn't exist.");
-        }
+        return studentRepository.findById(id).orElseThrow(() -> new NoSuchElementException("The student with the id " + id + " doesn't exist."));
     }
 
     public Student updateStudent(Long id, Student student) {
-        Student studentDto = findStudentById(id);
+
+        Student studentToUpdate = findStudentById(id);
+
+        studentToUpdate.setFirstName(student.getFirstName());
+        studentToUpdate.setLastName(student.getLastName());
+        studentToUpdate.setEmail(student.getEmail());
+        studentToUpdate.setProfile(student.getProfile());
+        studentToUpdate.setSchool(student.getSchool());
+
+        System.out.println("Student updated successfully.");
         return studentRepository.save(student);
     }
 

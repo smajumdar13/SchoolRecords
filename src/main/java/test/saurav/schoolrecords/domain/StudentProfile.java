@@ -2,15 +2,20 @@ package test.saurav.schoolrecords.domain;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
-import lombok.Data;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
 @Entity
 @Table
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class StudentProfile {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "student_profile_seq")
+    @SequenceGenerator(name = "student_profile_seq", allocationSize = 1)
     private Long id;
 
     @OneToOne
