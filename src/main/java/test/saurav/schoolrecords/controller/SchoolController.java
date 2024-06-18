@@ -21,9 +21,8 @@ public class SchoolController {
     }
 
     @PostMapping("")
-    public ResponseEntity<String> addSchool(@RequestBody School school) {
-        schoolService.addSchool(school);
-        return new ResponseEntity<>("School successfully added.", HttpStatus.CREATED);
+    public ResponseEntity<String> addOrUpdateSchool(@RequestBody School school) {
+        return schoolService.addOrUpdateSchool(school);
     }
 
     @GetMapping("")

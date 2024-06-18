@@ -113,9 +113,9 @@ class StudentServiceTest {
     @Test
     public void deleteStudentByIdDeletesTheStudentRecord() {
         // Given
-        Student student = createStudent();
-        Long id = student.getId();
-        when(studentRepository.findById(id)).thenReturn(Optional.of(createStudent()));
+        Student student = new Student();
+        Long id = nextLong();
+        when(studentRepository.findById(id)).thenReturn(Optional.of(student));
 
         // When
         studentService.deleteStudentById(id);
